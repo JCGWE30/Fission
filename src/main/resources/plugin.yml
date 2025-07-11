@@ -1,0 +1,7 @@
+name: Fission
+version: '1.0-SNAPSHOT'
+main: org.lepigslayer.fission.Fission
+api-version: '1.21'
+prefix: Fission
+authors: [ LePigSlayer ]
+description: Fission is my main plugin library to make my life easier
