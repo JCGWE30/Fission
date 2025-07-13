@@ -15,6 +15,7 @@
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <remapped.version>1.21.6-R0.1-SNAPSHOT</remapped.version>
+        <output-directory>B:\SpigotPlugins\Fission\TestServer\plugins</output-directory>
     </properties>
 
     <build>
@@ -56,6 +57,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <outputDirectory>${output-directory}</outputDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

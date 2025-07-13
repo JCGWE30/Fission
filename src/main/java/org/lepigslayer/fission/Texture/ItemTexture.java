@@ -1,4 +1,4 @@
-package org.lepigslayer.fission.HeadFetching;
+package org.lepigslayer.fission.Texture;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,11 +15,11 @@ public class ItemTexture {
     private boolean isSkull = false;
     private URL skullURL;
 
-    public ItemTexture(Material material) {
+    private ItemTexture(Material material) {
         this.material = material;
     }
 
-    public ItemTexture(String skullValue){
+    private ItemTexture(String skullValue){
         try {
             this.material = Material.PLAYER_HEAD;
             this.skullURL = URI.create(skullValue).toURL();
@@ -39,6 +39,15 @@ public class ItemTexture {
         profile.getTextures().setSkin(skullURL);
         meta.setOwnerProfile(profile);
         item.setItemMeta(meta);
+
         return item;
+    }
+
+    public static ItemTexture of(Material material) {
+        return new ItemTexture(material);
+    }
+
+    public static ItemTexture of(String skullValue) {
+        return new ItemTexture(skullValue);
     }
 }
