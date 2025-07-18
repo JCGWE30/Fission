@@ -5,7 +5,9 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -29,6 +31,26 @@ public class InstancedData<T> {
         }
 
         return clazz.cast(dataObject);
+    }
+
+    <C> List<C> getAllData(Class<C> clazz, Gson gson) {
+        List<C> dataList = new ArrayList<>();
+        for (String fileName : getFileNames()) {
+            dataList.add(getData(clazz, fileName, gson));
+        }
+        return dataList;
+    }
+
+    boolean hasData(Class<?> clazz, String name) {
+        return data.containsKey(name);
+    }
+
+    private String[] getFileNames(){
+        if (!fileRoot.exists()) {
+            fileRoot.mkdirs();
+        }
+
+        return fileRoot.list();
     }
 
     private T loadData(String name, Gson gson){

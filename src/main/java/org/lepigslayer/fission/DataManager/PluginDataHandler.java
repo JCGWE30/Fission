@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -53,6 +54,20 @@ public class PluginDataHandler {
             throw new IllegalArgumentException("Class " + clazz.getName() + " is not registered");
 
         return instancedClasses.get(clazz).getData(clazz,name,gson);
+    }
+
+    <T> List<T> getAllInstanced(Class<T> clazz){
+        if(!instancedClasses.containsKey(clazz))
+            throw new IllegalArgumentException("Class " + clazz.getName() + " is not registered");
+
+        return instancedClasses.get(clazz).getAllData(clazz,gson);
+    }
+
+    boolean instancedExists(Class<?> clazz, String name){
+        if(!instancedClasses.containsKey(clazz))
+            throw new IllegalArgumentException("Class " + clazz.getName() + " is not registered");
+
+        return instancedClasses.get(clazz).hasData(clazz,name);
     }
 
     void saveStatic(Class<?> clazz){

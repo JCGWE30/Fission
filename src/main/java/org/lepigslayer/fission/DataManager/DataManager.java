@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -36,6 +37,16 @@ public class DataManager {
     public static <T> T getInstanced(Class<T> dataClass, String name){
         PluginDataHandler handler = enforcePlugin(dataClass);
         return handler.getInstanced(dataClass,name);
+    }
+
+    public static <T> List<T> getAllInstanced(Class<T> dataClass){
+        PluginDataHandler handler = enforcePlugin(dataClass);
+        return handler.getAllInstanced(dataClass);
+    }
+
+    public static boolean instancedExists(Class<?> dataClass, String name){
+        PluginDataHandler handler = enforcePlugin(dataClass);
+        return handler.instancedExists(dataClass,name);
     }
 
     public static void saveAll(){
