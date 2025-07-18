@@ -18,12 +18,7 @@ public class StaticData<T> {
         this.name = name;
         this.dataClass = clazz;
         try {
-            boolean wasAccessable = clazz.getDeclaredConstructor().canAccess(null);
-            clazz.getDeclaredConstructor().setAccessible(true);
-
             data = clazz.getDeclaredConstructor().newInstance();
-
-            clazz.getDeclaredConstructor().setAccessible(wasAccessable);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
