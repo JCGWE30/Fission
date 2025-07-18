@@ -3,11 +3,9 @@ package org.lepigslayer.fission;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.lepigslayer.fission.CustomCommand.CustomCommandHandler;
 import org.lepigslayer.fission.CustomInventory.CustomInventoryManager;
-import org.lepigslayer.fission.Testing.CustomCommand.TestCustomCommand;
-import org.lepigslayer.fission.Testing.CustomInventory.CustomInventoryTester;
-import org.lepigslayer.fission.Testing.RunTestsCommand;
+import org.lepigslayer.fission.DataManager.DataManager;
+import org.lepigslayer.fission.ScoreboardManager.ScoreboardManager;
 
 public final class Fission extends JavaPlugin {
 
@@ -17,19 +15,19 @@ public final class Fission extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerEvents(CustomInventoryManager.class);
-
-        getCommand("runtests").setExecutor(new CustomCommandHandler(new TestCustomCommand()));
+        registerEvents(ScoreboardManager.class);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        DataManager.saveAll();
     }
 
-    private void registerEvents(Class<? extends Listener> listenerClass) {
+    public static void registerEvents(Class<? extends Listener> listenerClass) {
         try {
+            JavaPlugin plugin = JavaPlugin.getProvidingPlugin(listenerClass);
             Listener listenerObject = listenerClass.getDeclaredConstructor().newInstance();
-            Bukkit.getPluginManager().registerEvents(listenerObject, this);
+            Bukkit.getPluginManager().registerEvents(listenerObject, plugin);
         }catch(Exception e){
             log("Failed to register listener: " + listenerClass.getName());
         }
