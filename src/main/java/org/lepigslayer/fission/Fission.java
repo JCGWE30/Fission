@@ -3,7 +3,9 @@ package org.lepigslayer.fission;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.lepigslayer.fission.CustomCommand.CustomCommandHandler;
 import org.lepigslayer.fission.CustomInventory.CustomInventoryManager;
+import org.lepigslayer.fission.Testing.CustomCommand.TestCustomCommand;
 import org.lepigslayer.fission.Testing.CustomInventory.CustomInventoryTester;
 import org.lepigslayer.fission.Testing.RunTestsCommand;
 
@@ -16,7 +18,7 @@ public final class Fission extends JavaPlugin {
         instance = this;
         registerEvents(CustomInventoryManager.class);
 
-        getCommand("runtests").setExecutor(new RunTestsCommand());
+        getCommand("runtests").setExecutor(new CustomCommandHandler(new TestCustomCommand()));
     }
 
     @Override
