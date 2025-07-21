@@ -54,5 +54,8 @@ public class StaticData<T> {
         String rawJson = new String(Files.readAllBytes(file.toPath()));
 
         data = gson.fromJson(rawJson, dataClass);
+
+        if(data instanceof DataHolder holder)
+            holder.onDataLoaded();
     }
 }

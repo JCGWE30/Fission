@@ -65,7 +65,12 @@ public class InstancedData<T> {
 
         try {
             String rawJson = new String(Files.readAllBytes(file.toPath()));
-            return gson.fromJson(rawJson, dataClass);
+            T data = gson.fromJson(rawJson, dataClass);
+
+            if(data instanceof DataHolder holder)
+                holder.onDataLoaded();
+
+            return data;
         }catch (Exception e){
             throw new RuntimeException(e);
         }
