@@ -5,7 +5,7 @@ import org.lepigslayer.fission.CustomInventory.CustomInventoryRenderer;
 import org.lepigslayer.fission.Utilities.ItemBuilder;
 
 public class DefaultInventoryRenderer extends CustomInventoryRenderer {
-    private static ItemBuilder BACKGROUND_PANE = new ItemBuilder()
+    protected static ItemBuilder BACKGROUND_PANE = new ItemBuilder()
             .texture(Material.GRAY_STAINED_GLASS_PANE)
             .amount(1)
             .name(" ");
