@@ -21,7 +21,7 @@ public class PlayerScoreboard {
         this.player = player;
         this.displayName = " ";
 
-        scoreboard = player.getScoreboard();
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         objective = scoreboard.registerNewObjective(player.getUniqueId().toString(), Criteria.DUMMY," ");
         player.setScoreboard(scoreboard);
     }
