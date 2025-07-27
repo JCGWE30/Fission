@@ -28,10 +28,10 @@ public class FloatParameter extends CommandParameter<Float> {
             if(number > max)
                 return "Number must be less than " + max;
 
-            return null;
         }catch(NumberFormatException e){
             return "Invalid number, must be a number";
         }
+        return null;
     }
 
     @Override

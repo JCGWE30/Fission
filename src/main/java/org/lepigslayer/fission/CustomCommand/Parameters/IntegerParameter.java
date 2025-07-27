@@ -33,7 +33,7 @@ public class IntegerParameter extends CommandParameter<Integer> {
         }catch(NumberFormatException e){
             return "Invalid number, must be a whole number";
         }
-        return "Invalid input";
+        return null;
     }
 
     @Override
