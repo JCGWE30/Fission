@@ -1,6 +1,7 @@
 package org.lepigslayer.fission.Utilities;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.lepigslayer.fission.Texture.ItemTexture;
@@ -14,6 +15,7 @@ public class ItemBuilder {
     private int amount;
     private String name;
     private List<String> lore;
+    private boolean isDisplay;
 
     public ItemBuilder() {
         this.lore = new ArrayList<>();
@@ -49,6 +51,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder markDisplay(){
+        this.isDisplay = true;
+        return this;
+    }
+
     public ItemStack build(){
         ItemStack item = texture.fetch();
         ItemMeta meta = item.getItemMeta();
@@ -56,6 +63,8 @@ public class ItemBuilder {
             meta.setDisplayName(name);
         if(lore.size()>0)
             meta.setLore(lore);
+        if(isDisplay)
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES,ItemFlag.HIDE_ADDITIONAL_TOOLTIP,ItemFlag.HIDE_UNBREAKABLE);
         item.setItemMeta(meta);
 
         return NBTUtils.setStackSize(item, amount);
