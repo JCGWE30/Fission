@@ -42,7 +42,7 @@ public class InstancedData<T> {
         if(this.data.containsKey(name))
             return true;
 
-        return Arrays.asList(getFileNames()).contains(name);
+        return Arrays.asList(getFileNames()).contains(name+".json");
     }
 
     private String[] getFileNames(){
