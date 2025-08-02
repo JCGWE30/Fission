@@ -1,6 +1,7 @@
 package org.lepigslayer.fission.CustomInventory.Slots;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.lepigslayer.fission.CustomInventory.CustomInventorySlot;
 import org.lepigslayer.fission.Texture.ItemTexture;
@@ -32,7 +33,7 @@ public class DynamicSlot extends CustomInventorySlot {
     }
 
     @Override
-    public void triggerClick() {
+    public void triggerClick(ClickType clickType) {
         if(clickAction != null)
             clickAction.accept(player);
     }

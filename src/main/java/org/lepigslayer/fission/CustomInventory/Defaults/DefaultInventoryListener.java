@@ -22,7 +22,7 @@ public class DefaultInventoryListener extends CustomInventoryListener {
         CustomInventorySlot slot = slotMap.get(e.getSlot());
 
         if (slot != null)
-            return holder.handleClick(slot);
+            return holder.handleClick(slot,e.getClick());
 
         return false;
     }

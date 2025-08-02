@@ -2,6 +2,7 @@ package org.lepigslayer.fission.CustomInventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
@@ -52,14 +53,14 @@ public abstract class CustomInventory implements InventoryHolder {
         this.renderer = renderer;
     }
 
-    public final boolean handleClick(CustomInventorySlot slot){
+    public final boolean handleClick(CustomInventorySlot slot, ClickType clickType){
 
         if(lastClick > System.currentTimeMillis())
             return false;
 
         lastClick = System.currentTimeMillis()+debounce;
 
-        slot.triggerClick();
+        slot.triggerClick(clickType);
         return true;
     }
 
