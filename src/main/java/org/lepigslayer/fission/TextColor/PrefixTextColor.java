@@ -11,6 +11,6 @@ public class PrefixTextColor implements TextColor{
 
     @Override
     public String colorString(String text) {
-        return prefix+textColor.colorString(text);
+        return textColor.colorString(text)+prefix;
     }
 }

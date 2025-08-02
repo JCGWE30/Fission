@@ -30,6 +30,5 @@ public class StringUtils {
             output.append(input, i, Math.min(i+step,input.length()));
         }
         return output.toString();
-
     }
 }

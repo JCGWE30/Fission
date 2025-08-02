@@ -26,9 +26,12 @@ public class CustomInventoryManager implements Listener {
         openInventories = new HashMap<>();
     }
 
-    static void registerInventory(Entity player, CustomInventory inventory) {
+    static void registerInventory(Entity player, CustomInventory inventory, boolean discrete) {
         Stack<CustomInventory> inventoryStack = instance.openInventories
                 .computeIfAbsent(player.getUniqueId(), k -> new Stack<>());
+
+        if(discrete)
+            inventoryStack.pop();
 
         inventoryStack.push(inventory);
     }

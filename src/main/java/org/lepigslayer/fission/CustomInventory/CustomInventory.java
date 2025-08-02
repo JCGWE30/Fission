@@ -64,8 +64,13 @@ public abstract class CustomInventory implements InventoryHolder {
         return true;
     }
 
+    public final void swapInventory(Player player){
+        CustomInventoryManager.registerInventory(player, this, true);
+        reOpenInventory(player);
+    }
+
     public final void openInventory(Player player) {
-        CustomInventoryManager.registerInventory(player, this);
+        CustomInventoryManager.registerInventory(player, this, false);
         reOpenInventory(player);
     }
 
