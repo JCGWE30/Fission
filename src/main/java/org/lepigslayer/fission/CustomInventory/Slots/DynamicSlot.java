@@ -10,19 +10,13 @@ import org.lepigslayer.fission.Utilities.ItemBuilder;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DynamicSlot extends CustomInventorySlot {
+public class DynamicSlot extends ClickableInventorySlot<DynamicSlot> {
 
     //This could also use a custom interface to not build the item from the ground up if thats needed.
     private Consumer<ItemBuilder> updateConsumer;
-    private Consumer<Player> clickAction;
 
     public DynamicSlot(Consumer<ItemBuilder> updateConsumer){
         this.updateConsumer = updateConsumer;
-    }
-
-    public DynamicSlot onClick(Consumer<Player> clickAction){
-        this.clickAction = clickAction;
-        return this;
     }
 
     @Override
@@ -30,11 +24,5 @@ public class DynamicSlot extends CustomInventorySlot {
         ItemBuilder builder = new ItemBuilder();
         updateConsumer.accept(builder);
         return builder.build();
-    }
-
-    @Override
-    public void triggerClick(ClickType clickType) {
-        if(clickAction != null)
-            clickAction.accept(player);
     }
 }

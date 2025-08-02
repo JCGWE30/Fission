@@ -12,14 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class BasicSlot extends CustomInventorySlot {
+public class BasicSlot extends ClickableInventorySlot<BasicSlot> {
     private ItemBuilder builder;
-    private Consumer<Player> clickAction;
-    private Map<ClickType, Consumer<Player>> detailedClickActions;
 
     public BasicSlot(ItemBuilder builder) {
         this.builder = builder;
-        detailedClickActions = new HashMap<>();
     }
 
     public BasicSlot(String name, int amount, ItemTexture texture, String... lore) {
@@ -38,25 +35,8 @@ public class BasicSlot extends CustomInventorySlot {
                 .lore(lore));
     }
 
-    public BasicSlot onClick(Consumer<Player> clickAction){
-        this.clickAction = clickAction;
-        return this;
-    }
-
-    public BasicSlot onClick(Consumer<Player> clickAction, ClickType clickType){
-        detailedClickActions.put(clickType, clickAction);
-        return this;
-    }
-
     @Override
     public ItemStack getItem() {
         return builder.build();
-    }
-
-    @Override
-    public void triggerClick(ClickType clickType) {
-        Consumer<Player> action = detailedClickActions.getOrDefault(clickType, clickAction);
-        if(action!=null)
-            action.accept(player);
     }
 }
