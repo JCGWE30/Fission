@@ -67,7 +67,7 @@ public class PluginDataHandler {
         if(!instancedClasses.containsKey(clazz))
             throw new IllegalArgumentException("Class " + clazz.getName() + " is not registered");
 
-        return instancedClasses.get(clazz).hasData(clazz,name);
+        return instancedClasses.get(clazz).hasData(name);
     }
 
     void saveStatic(Class<?> clazz){

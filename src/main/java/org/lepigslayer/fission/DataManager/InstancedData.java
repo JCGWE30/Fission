@@ -5,10 +5,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class InstancedData<T> {
@@ -41,8 +38,11 @@ public class InstancedData<T> {
         return dataList;
     }
 
-    boolean hasData(Class<?> clazz, String name) {
-        return data.containsKey(name);
+    boolean hasData(String name) {
+        if(this.data.containsKey(name))
+            return true;
+
+        return Arrays.asList(getFileNames()).contains(name);
     }
 
     private String[] getFileNames(){

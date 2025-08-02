@@ -14,6 +14,7 @@ public class ItemTexture {
     private Material material;
     private boolean isSkull = false;
     private URL skullURL;
+    private PlayerProfile profile;
 
     private ItemTexture(Material material) {
         this.material = material;
@@ -35,8 +36,11 @@ public class ItemTexture {
             return item;
 
         SkullMeta meta = ((SkullMeta) item.getItemMeta());
-        PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID());
-        profile.getTextures().setSkin(skullURL);
+
+        if(profile==null){
+            profile = Bukkit.createPlayerProfile(UUID.randomUUID());
+            profile.getTextures().setSkin(skullURL);
+        }
         meta.setOwnerProfile(profile);
         item.setItemMeta(meta);
 
