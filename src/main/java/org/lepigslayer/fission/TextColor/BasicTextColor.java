@@ -10,7 +10,7 @@ public class BasicTextColor implements TextColor {
     }
 
     public PrefixTextColor withPrefix(String prefix) {
-        return new PrefixTextColor(color.toString() + prefix);
+        return new PrefixTextColor(prefix,this);
     }
 
     @Override
