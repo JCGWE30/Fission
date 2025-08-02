@@ -9,6 +9,10 @@ public class BasicTextColor implements TextColor {
         this.color = color;
     }
 
+    public PrefixTextColor withPrefix(String prefix) {
+        return new PrefixTextColor(color.toString() + prefix);
+    }
+
     @Override
     public String colorString(String text) {
         return color.toString()+text;
