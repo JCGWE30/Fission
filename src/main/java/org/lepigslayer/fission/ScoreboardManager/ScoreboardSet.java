@@ -47,11 +47,7 @@ public class ScoreboardSet {
 
         int blankIndex = 0;
         for(int i = 0; i<lines.size(); i++){
-            String line = lines.get(i);
-
-            if(line.isBlank()){
-                lines.set(i, generateMarker(blankIndex++));
-            }
+            lines.set(i, generateMarker(blankIndex++));
         }
 
         return lines.reversed();
