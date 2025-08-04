@@ -47,7 +47,7 @@ public class ScoreboardSet {
 
         int blankIndex = 0;
         for(int i = 0; i<lines.size(); i++){
-            lines.set(i, generateMarker(blankIndex++));
+            lines.set(i, generateMarker(blankIndex++)+lines.get(i));
         }
 
         return lines.reversed();
@@ -59,6 +59,7 @@ public class ScoreboardSet {
             builder.append("§")
                     .append(c);
         }
+        builder.append("§r");
         return builder.toString();
     }
 }

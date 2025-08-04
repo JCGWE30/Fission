@@ -42,6 +42,9 @@ public abstract class CustomInventory implements InventoryHolder {
     }
 
     protected final void setSlot(int position, CustomInventorySlot slot){
+        if(slot==null)
+            return;
+
         slotMap.put(position, slot);
     }
 
