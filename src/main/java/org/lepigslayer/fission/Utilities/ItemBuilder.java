@@ -1,6 +1,7 @@
 package org.lepigslayer.fission.Utilities;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,6 +17,7 @@ public class ItemBuilder {
     private String name;
     private List<String> lore;
     private boolean isDisplay;
+    private boolean isGlowing;
 
     public ItemBuilder() {
         this.lore = new ArrayList<>();
@@ -46,6 +48,15 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder glow(){
+        return glow(true);
+    }
+
+    public ItemBuilder glow(boolean glowing){
+        this.isGlowing = glowing;
+        return this;
+    }
+
     public ItemBuilder lore(List<String> lore){
         this.lore = lore;
         return this;
@@ -65,6 +76,9 @@ public class ItemBuilder {
             meta.setLore(lore);
         if(isDisplay)
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES,ItemFlag.HIDE_ADDITIONAL_TOOLTIP,ItemFlag.HIDE_UNBREAKABLE);
+        if(isGlowing){
+            meta.setEnchantmentGlintOverride(true);
+        }
         item.setItemMeta(meta);
 
         return NBTUtils.setStackSize(item, amount);
