@@ -20,4 +20,13 @@ public class DefaultInventoryRenderer extends CustomInventoryRenderer {
             }
         }
     }
+
+    @Override
+    public void slotUpdate(int slot) {
+        if(slotMap.containsKey(slot)) {
+            inventory.setItem(slot, slotMap.get(slot).getItem());
+        }else{
+            inventory.setItem(slot, BACKGROUND_PANE.build());
+        }
+    }
 }
