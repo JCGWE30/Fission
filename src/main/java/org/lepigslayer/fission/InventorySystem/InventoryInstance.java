@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public abstract class InventoryInstance extends InventoryComponent implements InventoryHolder {
-    private Player player;
+    protected Player player;
     private Map<Class<?>, InventoryComponent> componentMap;
     private Inventory inventory;
 
