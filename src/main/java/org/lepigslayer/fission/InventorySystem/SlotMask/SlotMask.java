@@ -18,7 +18,7 @@ public interface SlotMask extends Iterator<Integer> {
     }
 
     static GridSlotMask grid(int size){
-        return new GridSlotMask(10,size-10);
+        return new GridSlotMask(10,size-11);
     }
 
     void reset();
