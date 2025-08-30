@@ -70,11 +70,12 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         inventory = Bukkit.createInventory(this, size, title);
     }
 
-    protected final void addComponent(InventoryComponent component){
+    protected final <T extends InventoryComponent> T addComponent(T component){
         if(componentMap.containsKey(component.getClass()))
             throw new IllegalArgumentException("Component already exists!");
         component.setInstance(this,player);
         componentMap.put(component.getClass(), component);
+        return component;
     }
 
     public ItemStack getItem(int slot){
