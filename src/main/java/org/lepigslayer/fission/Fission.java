@@ -5,7 +5,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.lepigslayer.fission.CustomInventory.CustomInventoryManager;
 import org.lepigslayer.fission.DataManager.DataManager;
+import org.lepigslayer.fission.InventorySystem.InventorySystemManager;
 import org.lepigslayer.fission.ScoreboardManager.ScoreboardManager;
+import org.lepigslayer.fission.Testing.RunTestsCommand;
 
 public final class Fission extends JavaPlugin {
 
@@ -14,6 +16,8 @@ public final class Fission extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        registerEvents(InventorySystemManager.class);
         registerEvents(CustomInventoryManager.class);
         registerEvents(ScoreboardManager.class);
     }
