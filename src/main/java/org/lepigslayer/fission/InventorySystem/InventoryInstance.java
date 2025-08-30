@@ -8,20 +8,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 public abstract class InventoryInstance extends InventoryComponent implements InventoryHolder {
     protected Player player;
     private Map<Class<?>, InventoryComponent> componentMap;
+    private Set<Integer> usedSlots;
     private Inventory inventory;
 
     private int size;
 
     public InventoryInstance(Player player){
         this.player = player;
+        this.usedSlots = new HashSet<>();
         this.componentMap = new LinkedHashMap<>();
         addComponent(this);
     }
@@ -40,6 +40,7 @@ public abstract class InventoryInstance extends InventoryComponent implements In
 
     public void refresh(){
         componentMap.values().forEach(InventoryComponent::reset);
+        usedSlots.clear();
 
         for(int i = 0;i<size;i++){
             inventory.setItem(i,null);
@@ -82,10 +83,11 @@ public abstract class InventoryInstance extends InventoryComponent implements In
 
     public void setItem(int slot, ItemStack item){
         inventory.setItem(slot, item);
+        usedSlots.add(slot);
     }
 
     public boolean hasItem(int slot){
-        return inventory.getItem(slot) != null;
+        return usedSlots.contains(slot);
     }
 
     void handleClick(InventoryClickEvent e){

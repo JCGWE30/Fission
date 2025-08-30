@@ -23,6 +23,9 @@ public class DefaultInventoryRenderer extends CustomInventoryRenderer {
 
     @Override
     public void slotUpdate(int slot) {
+        if(slotMap == null)
+            return;
+
         if(slotMap.containsKey(slot)) {
             inventory.setItem(slot, slotMap.get(slot).getItem());
         }else{
