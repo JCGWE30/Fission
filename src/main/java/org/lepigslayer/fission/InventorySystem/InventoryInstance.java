@@ -4,12 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public abstract class InventoryInstance extends InventoryComponent implements InventoryHolder {
     protected Player player;
@@ -17,6 +17,7 @@ public abstract class InventoryInstance extends InventoryComponent implements In
     private Set<Integer> usedSlots;
     private Inventory inventory;
 
+    private String title;
     private int size;
 
     public InventoryInstance(Player player){
@@ -26,19 +27,19 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         addComponent(this);
     }
 
-    public void open(){
-        load();
+    public final void open(){
         InventorySystemManager.openInventory(player, this);
+        load();
     }
 
-    public void load(){
+    public final void load(){
         for (InventoryComponent component : componentMap.values()) {
             component.initalize();
             component.update();
         }
     }
 
-    public void refresh(){
+    public final void refresh(){
         componentMap.values().forEach(InventoryComponent::reset);
         usedSlots.clear();
 
@@ -49,7 +50,11 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         load();
     }
 
-    public int getSize() {
+    public final String getTitle() {
+        return title;
+    }
+
+    public final int getSize() {
         return size;
     }
 
@@ -65,6 +70,7 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         if(rowCount > 6)
             throw new IllegalArgumentException("Rows must be less than 6");
 
+        this.title = title;
         this.size = rowCount * 9;
 
         inventory = Bukkit.createInventory(this, size, title);
@@ -78,20 +84,20 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         return component;
     }
 
-    public ItemStack getItem(int slot){
+    public final ItemStack getItem(int slot){
         return inventory.getItem(slot);
     }
 
-    public void setItem(int slot, ItemStack item){
+    public final void setItem(int slot, ItemStack item){
         inventory.setItem(slot, item);
         usedSlots.add(slot);
     }
 
-    public boolean hasItem(int slot){
+    public final boolean hasItem(int slot){
         return usedSlots.contains(slot);
     }
 
-    void handleClick(InventoryClickEvent e){
+    final void handleClick(InventoryClickEvent e){
         if(e.getClickedInventory() == null)
             return;
 
@@ -100,17 +106,30 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         ClickType clickType = e.getClick();
 
         for (InventoryComponent comp : componentMap.values()) {
-            ClickResult result = isInvenClick ? comp.handleInventoryClick(slot,clickType) : comp.handlePlayerClick(slot,clickType);
+            EventResult result = isInvenClick ? comp.processInventoryClick(slot,clickType) : comp.processPlayerClick(slot,clickType);
 
-            if(result == ClickResult.IGNORE)
+            if(result == EventResult.IGNORE)
                 continue;
 
-            e.setCancelled(result == ClickResult.DENY);
+            e.setCancelled(result == EventResult.DENY);
             return;
         }
     }
 
-    void updateInventory(){
+    final boolean handleClose(InventoryCloseEvent e){
+        for (InventoryComponent comp : componentMap.values()) {
+            EventResult result = comp.processClose();
+
+            if(result == EventResult.IGNORE)
+                continue;
+
+            return result == EventResult.DENY;
+        }
+
+        return false;
+    }
+
+    final void updateInventory(){
         componentMap.values().forEach(InventoryComponent::update);
     }
 

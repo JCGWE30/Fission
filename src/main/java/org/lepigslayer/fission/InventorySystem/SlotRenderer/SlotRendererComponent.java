@@ -1,7 +1,5 @@
 package org.lepigslayer.fission.InventorySystem.SlotRenderer;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.event.inventory.ClickType;
 import org.lepigslayer.fission.InventorySystem.InventoryComponent;
 import org.lepigslayer.fission.Utilities.ItemBuilder;
@@ -74,20 +72,20 @@ public class SlotRendererComponent extends InventoryComponent {
     }
 
     @Override
-    public ClickResult handlePlayerClick(int slot, ClickType type) {
-        return ClickResult.DENY;
+    public EventResult processPlayerClick(int slot, ClickType type) {
+        return EventResult.DENY;
     }
 
     @Override
-    public ClickResult handleInventoryClick(int slot, ClickType type) {
+    public EventResult processInventoryClick(int slot, ClickType type) {
         if (!slotMap.containsKey(slot))
-            return ClickResult.DENY;
+            return EventResult.DENY;
 
         InventorySlot inventorySlot = slotMap.get(slot);
 
         inventorySlot.triggerClickAction(type);
         inventorySlot.triggerClickAction(ClickType.UNKNOWN);
 
-        return ClickResult.DENY;
+        return EventResult.DENY;
     }
 }
