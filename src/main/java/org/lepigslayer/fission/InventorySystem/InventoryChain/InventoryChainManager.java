@@ -31,6 +31,7 @@ public class InventoryChainManager implements Listener {
             return;
 
         InventoryInstance inventory = chain.pop();
+        inventory.refresh();
         InventorySystemManager.setInventory(player, inventory);
     }
 

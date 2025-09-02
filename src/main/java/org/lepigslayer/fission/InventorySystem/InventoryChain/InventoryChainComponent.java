@@ -3,7 +3,6 @@ package org.lepigslayer.fission.InventorySystem.InventoryChain;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.lepigslayer.fission.InventorySystem.InventoryComponent;
-import org.lepigslayer.fission.InventorySystem.SlotRenderer.InventorySlot;
 import org.lepigslayer.fission.Utilities.ItemBuilder;
 
 public class InventoryChainComponent extends InventoryComponent {
@@ -30,12 +29,12 @@ public class InventoryChainComponent extends InventoryComponent {
     }
 
     @Override
-    public EventResult processInventoryClick(int slot, ClickType type) {
+    public ClickResult processInventoryClick(int slot, ClickType type) {
         if(this.slot != slot || !InventoryChainManager.hasPrevious(player))
-            return EventResult.IGNORE;
+            return ClickResult.IGNORE;
 
         InventoryChainManager.traverse(player);
 
-        return EventResult.DENY;
+        return ClickResult.DENY;
     }
 }

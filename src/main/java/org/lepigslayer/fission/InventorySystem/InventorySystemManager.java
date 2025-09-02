@@ -1,10 +1,12 @@
 package org.lepigslayer.fission.InventorySystem;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.lepigslayer.fission.Fission;
 import org.lepigslayer.fission.InventorySystem.InventoryChain.InventoryChainManager;
 import org.lepigslayer.fission.Utilities.TimeUtils;
@@ -19,7 +21,7 @@ public final class InventorySystemManager implements Listener {
     private static Set<Player> switchingPlayers = new HashSet<>();
 
     public InventorySystemManager() {
-        TimeUtils.runTask(Fission.class, this::update, 10);
+        TimeUtils.runTask(Fission.class, this::update, 1);
     }
 
     private void update() {
@@ -38,7 +40,6 @@ public final class InventorySystemManager implements Listener {
         switchingPlayers.add(player);
         player.openInventory(inventory.getInventory());
         switchingPlayers.remove(player);
-
     }
 
     @EventHandler
@@ -53,15 +54,29 @@ public final class InventorySystemManager implements Listener {
 
     @EventHandler
     public void close(InventoryCloseEvent e) {
-        if(switchingPlayers.contains(e.getPlayer()))
+        Player p = (Player) e.getPlayer();
+
+        if (switchingPlayers.contains(p))
             return;
 
-        if (!openInventories.get(e.getPlayer()).handleClose(e)) {
-            openInventories.remove(e.getPlayer());
-            InventoryChainManager.wipe(((Player) e.getPlayer()));
-            return;
-        }
+        InventoryInstance inventory = openInventories.get(p);
 
-        openInventories.get(e.getPlayer()).open();
+        openInventories.remove(p);
+
+        Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Fission.class), () -> {
+            openInventories.put(p, inventory);
+            InventoryComponent.CloseResult result = inventory.handleClose(e);
+
+            if (result == InventoryComponent.CloseResult.HANDLED)
+                return;
+
+            if (result == InventoryComponent.CloseResult.REOPEN) {
+                p.openInventory(inventory.getInventory());
+                return;
+            }
+
+            openInventories.remove(p, inventory);
+            InventoryChainManager.wipe(p);
+        }, 3);
     }
 }

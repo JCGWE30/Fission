@@ -8,6 +8,10 @@ public class LoreSection {
     private List<String> lines;
     private InventorySlot slot;
 
+    public LoreSection() {
+        lines = new ArrayList<>();
+    }
+
     void setOwningSlot(InventorySlot slot) {
         this.slot = slot;
     }

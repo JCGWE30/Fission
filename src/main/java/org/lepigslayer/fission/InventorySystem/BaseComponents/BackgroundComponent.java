@@ -21,7 +21,7 @@ public class BackgroundComponent extends InventoryComponent {
     }
 
     @Override
-    public EventResult processInventoryClick(int slot, ClickType type) {
-        return EventResult.DENY;
+    public ClickResult processInventoryClick(int slot, ClickType type) {
+        return ClickResult.DENY;
     }
 }

@@ -24,23 +24,28 @@ public class SlotRendererComponent extends InventoryComponent {
     }
 
     private void updateSlot(int position) {
-        InventorySlot slot = slotMap.get(position);
+        try {
+            InventorySlot slot = slotMap.get(position);
 
-        ItemBuilder builder = new ItemBuilder()
-                .name(slot.getName())
-                .amount(slot.getAmount())
-                .texture(slot.getTexture())
-                .glow(slot.isGlowing());
+            ItemBuilder builder = new ItemBuilder()
+                    .name(slot.getName())
+                    .amount(slot.getAmount())
+                    .texture(slot.getTexture())
+                    .glow(slot.isGlowing());
 
-        List<String> lore = new ArrayList<>();
+            List<String> lore = new ArrayList<>();
 
-        for (LoreSection section : slot.getLore()) {
-            lore.addAll(section.getLines());
+            for (LoreSection section : slot.getLore()) {
+                lore.addAll(section.getLines());
+            }
+
+            builder.lore(lore);
+
+            instance.setItem(position, builder.build());
+        }catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        builder.lore(lore);
-
-        instance.setItem(position, builder.build());
     }
 
     @Override
@@ -72,20 +77,20 @@ public class SlotRendererComponent extends InventoryComponent {
     }
 
     @Override
-    public EventResult processPlayerClick(int slot, ClickType type) {
-        return EventResult.DENY;
+    public ClickResult processPlayerClick(int slot, ClickType type) {
+        return ClickResult.DENY;
     }
 
     @Override
-    public EventResult processInventoryClick(int slot, ClickType type) {
+    public ClickResult processInventoryClick(int slot, ClickType type) {
         if (!slotMap.containsKey(slot))
-            return EventResult.DENY;
+            return ClickResult.DENY;
 
         InventorySlot inventorySlot = slotMap.get(slot);
 
         inventorySlot.triggerClickAction(type);
         inventorySlot.triggerClickAction(ClickType.UNKNOWN);
 
-        return EventResult.DENY;
+        return ClickResult.DENY;
     }
 }

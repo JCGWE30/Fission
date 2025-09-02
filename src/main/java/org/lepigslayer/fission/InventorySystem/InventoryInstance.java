@@ -35,6 +35,8 @@ public abstract class InventoryInstance extends InventoryComponent implements In
     public final void load(){
         for (InventoryComponent component : componentMap.values()) {
             component.initalize();
+        }
+        for (InventoryComponent component : componentMap.values()) {
             component.update();
         }
     }
@@ -106,27 +108,27 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         ClickType clickType = e.getClick();
 
         for (InventoryComponent comp : componentMap.values()) {
-            EventResult result = isInvenClick ? comp.processInventoryClick(slot,clickType) : comp.processPlayerClick(slot,clickType);
+            ClickResult result = isInvenClick ? comp.processInventoryClick(slot,clickType) : comp.processPlayerClick(slot,clickType);
 
-            if(result == EventResult.IGNORE)
+            if(result == ClickResult.IGNORE)
                 continue;
 
-            e.setCancelled(result == EventResult.DENY);
+            e.setCancelled(result == ClickResult.DENY);
             return;
         }
     }
 
-    final boolean handleClose(InventoryCloseEvent e){
+    final CloseResult handleClose(InventoryCloseEvent e){
         for (InventoryComponent comp : componentMap.values()) {
-            EventResult result = comp.processClose();
+            CloseResult result = comp.processClose();
 
-            if(result == EventResult.IGNORE)
+            if(result == CloseResult.IGNORE)
                 continue;
 
-            return result == EventResult.DENY;
+            return result;
         }
 
-        return false;
+        return CloseResult.IGNORE;
     }
 
     final void updateInventory(){

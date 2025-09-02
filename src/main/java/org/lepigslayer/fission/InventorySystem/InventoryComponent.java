@@ -6,10 +6,15 @@ import org.lepigslayer.fission.InventorySystem.SlotRenderer.InventorySlot;
 import org.lepigslayer.fission.InventorySystem.SlotRenderer.SlotRendererComponent;
 
 public abstract class InventoryComponent {
-    public static enum EventResult {
+    public static enum ClickResult {
         IGNORE,
         ALLOW,
         DENY
+    }
+    public static enum CloseResult {
+        IGNORE,
+        REOPEN,
+        HANDLED,
     }
 
     private record ClickAction(Runnable action, ClickType type) {
@@ -27,16 +32,16 @@ public abstract class InventoryComponent {
         this.player = player;
     }
 
-    public EventResult processInventoryClick(int slot, ClickType type) {
-        return EventResult.IGNORE;
+    public ClickResult processInventoryClick(int slot, ClickType type) {
+        return ClickResult.IGNORE;
     }
 
-    public EventResult processPlayerClick(int slot, ClickType type) {
-        return EventResult.IGNORE;
+    public ClickResult processPlayerClick(int slot, ClickType type) {
+        return ClickResult.IGNORE;
     }
 
-    public EventResult processClose(){
-        return EventResult.IGNORE;
+    public CloseResult processClose(){
+        return CloseResult.IGNORE;
     }
 
     public void update(){
