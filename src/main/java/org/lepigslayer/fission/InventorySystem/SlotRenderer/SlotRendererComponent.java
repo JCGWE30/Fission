@@ -31,6 +31,7 @@ public class SlotRendererComponent extends InventoryComponent {
                     .name(slot.getName())
                     .amount(slot.getAmount())
                     .texture(slot.getTexture())
+                    .markDisplay()
                     .glow(slot.isGlowing());
 
             List<String> lore = new ArrayList<>();
@@ -71,9 +72,8 @@ public class SlotRendererComponent extends InventoryComponent {
                 continue;
 
             updateSlot(position);
+            slot.clean();
         }
-
-        slotMap.values().forEach(InventorySlot::clean);
     }
 
     @Override

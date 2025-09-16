@@ -15,6 +15,8 @@ public class InventorySlot {
     private Map<ClickType, Runnable> clickActions;
     private boolean glowing = false;
 
+    private LoreSection currentLoreSection;
+
     public InventorySlot() {
         lore = new ArrayList<>();
         clickActions = new HashMap<>();
@@ -82,13 +84,19 @@ public class InventorySlot {
     }
 
     public InventorySlot lore(List<String> lore) {
-        LoreSection section = new LoreSection();
-        section.setLines(lore);
-        return loreSection(section);
+        if(currentLoreSection == null){
+            currentLoreSection = new LoreSection();
+            currentLoreSection.setOwningSlot(this);
+            this.lore.add(currentLoreSection);
+        }
+
+        lore.forEach(currentLoreSection::addLine);
+        return this;
     }
 
     public InventorySlot loreSection(LoreSection section) {
-        lore.add(section);
+        currentLoreSection = null;
+        this.lore.add(section);
         section.setOwningSlot(this);
         this.dirty = true;
         return this;

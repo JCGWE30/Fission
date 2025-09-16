@@ -29,7 +29,7 @@ public class TestScoreboardSection implements ScoreboardSection {
             tickCounter = Integer.MAX_VALUE;
 
         List<String> lines = new ArrayList<>();
-        lines.add(StringUtils.rainbowString(preText,true,3,tickCounter));
+//        lines.add(StringUtils.rainbowString(preText,true,3,tickCounter));
         return lines;
     }
 }

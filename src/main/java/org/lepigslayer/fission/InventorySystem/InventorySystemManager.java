@@ -56,6 +56,9 @@ public final class InventorySystemManager implements Listener {
     public void close(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
 
+        if(!openInventories.containsKey(p))
+            return;
+
         if (switchingPlayers.contains(p))
             return;
 

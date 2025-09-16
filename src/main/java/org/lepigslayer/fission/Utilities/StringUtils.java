@@ -1,34 +1,89 @@
 package org.lepigslayer.fission.Utilities;
 
 import org.bukkit.Bukkit;
+import org.lepigslayer.fission.Colors.CustomColor;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class StringUtils {
-    private static char[] rainbowColors = "4c6e2ab319d5".toCharArray();
 
-    public static String rainbowString(String input) {
-        return rainbowString(input, false, 1, 0);
-    }
+    public static String makeProgressBar(double progress, int segments){
+        int activeSegments = (int) Math.floor(segments * progress);
 
-    public static String rainbowString(String input, boolean bold) {
-        return rainbowString(input, bold, 1, 0);
-    }
+        StringBuilder builder = new StringBuilder("§a");
 
-    public static String rainbowString(String input, boolean bold, int step) {
-        return rainbowString(input, bold, step, 0);
-    }
-
-    public static String rainbowString(String input, boolean bold, int step, int offset){
-        StringBuilder output = new StringBuilder();
-        int counter = offset % rainbowColors.length;
-        for(int i = 0; i < input.length(); i+=step){
-            output.append("§");
-            output.append(rainbowColors[counter++ % rainbowColors.length]);
-
-            if(bold)
-                output.append("§l");
-
-            output.append(input, i, Math.min(i+step,input.length()));
+        for(int i = 0; i < activeSegments; i++){
+            builder.append("☷");
         }
-        return output.toString();
+
+        builder.append("§7");
+
+        for(int i = activeSegments;i < segments; i++){
+            builder.append("☷");
+        }
+        return builder.toString();
+    }
+
+    public static List<String> wrap(String total, int characterLimit, String regex){
+        Pattern pattern = Pattern.compile(regex);
+        int runningCount = 0;
+        StringBuilder builder = new StringBuilder();
+        List<String> totalLines = new ArrayList<>();
+        for(char c: total.toCharArray()){
+            if(runningCount++>characterLimit){
+                if(pattern.matcher(c+"").find()){
+                    totalLines.add(builder.toString());
+                    builder = new StringBuilder();
+                    runningCount = 0;
+                    continue;
+                }
+            }
+            if(pattern.matcher(c+"").find() && runningCount == 1) continue;
+            builder.append(c);
+        }
+        totalLines.add(builder.toString());
+        return totalLines;
+    }
+
+    public static List<String> wrap(String total, int characterLimit, CustomColor color){
+        Pattern pattern = Pattern.compile("[, ]");
+        int runningCount = 0;
+        StringBuilder builder = new StringBuilder();
+        List<String> totalLines = new ArrayList<>();
+        for(char c: total.toCharArray()){
+            if(runningCount++>characterLimit){
+                if(pattern.matcher(c+"").find()){
+                    totalLines.add(color.colorString(builder.toString()));
+                    builder = new StringBuilder();
+                    runningCount = 0;
+                    continue;
+                }
+            }
+            if(pattern.matcher(c+"").find() && runningCount == 1) continue;
+            builder.append(c);
+        }
+        totalLines.add(color.colorString(builder.toString()));
+        return totalLines;
+    }
+
+    public static Duration getReadTime(String read){
+        double wordsPerMinute = 225.0;
+        double wordsPerMillisecond = wordsPerMinute / 60000.0;
+
+        if (read == null || read.trim().isEmpty()) {
+            return Duration.ZERO;
+        }
+
+        // Replace multiple spaces with single space and trim
+        String cleanedText = read.trim().replaceAll("\\s+", " ");
+        // Split by whitespace
+        String[] words = cleanedText.split(" ");
+        int wordCount = words.length;
+
+        long durationMs = (long) (wordCount / wordsPerMillisecond);
+        return Duration.ofMillis(durationMs);
     }
 }
