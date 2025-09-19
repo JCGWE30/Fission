@@ -12,10 +12,10 @@ public class NumberUtils {
     private static TreeMap<Double, String> abrevMap = new TreeMap<>();
 
     static{
-        abrevMap.put(1000.0,"K");
-        abrevMap.put(1000000.0,"M");
-        abrevMap.put(1000000000.0,"B");
-        abrevMap.put(1000000000000.0,"T");
+        abrevMap.put(1000.0,"k");
+        abrevMap.put(1000000.0,"m");
+        abrevMap.put(1000000000.0,"b");
+        abrevMap.put(1000000000000.0,"t");
 
         numeralMap.put(1000, "M");
         numeralMap.put(900, "CM");

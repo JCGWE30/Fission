@@ -19,6 +19,7 @@ import java.util.Set;
 public final class InventorySystemManager implements Listener {
     private static Map<Player, InventoryInstance> openInventories = new HashMap<>();
     private static Set<Player> switchingPlayers = new HashSet<>();
+    private static Set<Player> processingPlayers = new HashSet<>();
 
     public InventorySystemManager() {
         TimeUtils.runTask(Fission.class, this::update, 1);
@@ -29,6 +30,8 @@ public final class InventorySystemManager implements Listener {
     }
 
     public static void openInventory(Player player, InventoryInstance inventory) {
+        if(processingPlayers.contains(player))
+            return;
         if (openInventories.containsKey(player))
             InventoryChainManager.enqueue(player, openInventories.get(player));
         setInventory(player, inventory);
@@ -49,7 +52,12 @@ public final class InventorySystemManager implements Listener {
         if (!openInventories.containsKey(player))
             return;
 
-        openInventories.get(player).handleClick(e);
+        try {
+            openInventories.get(player).handleClick(e);
+        }catch (Exception ex) {
+            e.setCancelled(true);
+            e.getWhoClicked().sendMessage("§cAn error occurred, please report this!");
+        }
     }
 
     @EventHandler
@@ -66,7 +74,9 @@ public final class InventorySystemManager implements Listener {
 
         openInventories.remove(p);
 
+        processingPlayers.add(p);
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Fission.class), () -> {
+            processingPlayers.remove(p);
             openInventories.put(p, inventory);
             InventoryComponent.CloseResult result = inventory.handleClose(e);
 

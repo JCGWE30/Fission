@@ -16,13 +16,13 @@ public class StringUtils {
         StringBuilder builder = new StringBuilder("§a");
 
         for(int i = 0; i < activeSegments; i++){
-            builder.append("☷");
+            builder.append("-");
         }
 
         builder.append("§7");
 
         for(int i = activeSegments;i < segments; i++){
-            builder.append("☷");
+            builder.append("-");
         }
         return builder.toString();
     }
