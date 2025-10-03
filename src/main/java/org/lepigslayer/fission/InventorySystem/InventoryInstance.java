@@ -32,6 +32,10 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         load();
     }
 
+    public final void forceClose(){
+        InventorySystemManager.forceCloseInventory(player);
+    }
+
     public final void load(){
         for (InventoryComponent component : componentMap.values()) {
             component.initalize();
