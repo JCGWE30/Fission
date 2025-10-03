@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class ScoreboardSet {
-    private HashMap<Integer, ScoreboardSection> sectionMap;
+    private HashMap<ScoreboardSection, Integer> sectionMap;
     private List<ScoreboardSection> orderedSections;
     String name;
 
@@ -16,10 +16,10 @@ public class ScoreboardSet {
     }
 
     public ScoreboardSet section(ScoreboardSection section, int priority){
-        sectionMap.put(priority, section);
+        sectionMap.put(section, priority);
         orderedSections = sectionMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
-                .map(Map.Entry::getValue)
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .map(Map.Entry::getKey)
                 .toList();
         return this;
     }

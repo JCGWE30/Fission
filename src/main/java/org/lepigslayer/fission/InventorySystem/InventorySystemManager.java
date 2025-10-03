@@ -45,6 +45,14 @@ public final class InventorySystemManager implements Listener {
         switchingPlayers.remove(player);
     }
 
+    public static void forceCloseInventory(Player player) {
+        openInventories.remove(player);
+        processingPlayers.remove(player);
+        switchingPlayers.remove(player);
+        player.closeInventory();
+        InventoryChainManager.wipe(player);
+    }
+
     @EventHandler
     public void click(InventoryClickEvent e) {
         Player player = ((Player) e.getWhoClicked());
@@ -56,6 +64,7 @@ public final class InventorySystemManager implements Listener {
             openInventories.get(player).handleClick(e);
         }catch (Exception ex) {
             e.setCancelled(true);
+            ex.printStackTrace();
             e.getWhoClicked().sendMessage("§cAn error occurred, please report this!");
         }
     }
@@ -76,6 +85,9 @@ public final class InventorySystemManager implements Listener {
 
         processingPlayers.add(p);
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Fission.class), () -> {
+            if(!processingPlayers.contains(p))
+                return;
+
             processingPlayers.remove(p);
             openInventories.put(p, inventory);
             InventoryComponent.CloseResult result = inventory.handleClose(e);
