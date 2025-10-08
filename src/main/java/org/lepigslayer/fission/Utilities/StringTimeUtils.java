@@ -75,4 +75,22 @@ public class StringTimeUtils {
 
         return getStamp(duration);
     }
+
+    public static String getHouredFormat(Duration duration){
+        List<String> values = new ArrayList<>();
+
+        if(duration.toHoursPart()>0)
+            values.add(String.format("%02d",duration.toHours()));
+
+        if(duration.toMinutesPart()>0||duration.toHours()>0)
+            values.add(String.format("%02d",duration.toMinutesPart()));
+
+        if(duration.toSecondsPart()>0||duration.toHours()>0)
+            values.add(String.format("%02d",duration.toSecondsPart()));
+
+        if(values.isEmpty())
+            return "Now";
+
+        return String.join(":", values);
+    }
 }

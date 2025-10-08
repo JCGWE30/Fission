@@ -28,6 +28,9 @@ public abstract class InventoryInstance extends InventoryComponent implements In
     }
 
     public final void open(){
+        if(inventory == null)
+            throw new RuntimeException("Inventory has no meta");
+
         InventorySystemManager.openInventory(player, this);
         load();
     }

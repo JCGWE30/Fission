@@ -2,15 +2,21 @@ package org.lepigslayer.fission.Texture;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ItemTexture {
+    private static Map<Material, ItemTexture> materialMap = new HashMap<>();
+
     private Material material;
     private boolean isSkull = false;
     private URL skullURL;
@@ -48,10 +54,16 @@ public class ItemTexture {
     }
 
     public static ItemTexture of(Material material) {
-        return new ItemTexture(material);
+        if(!materialMap.containsKey(material))
+            materialMap.put(material, new ItemTexture(material));
+        return materialMap.get(material);
     }
 
     public static ItemTexture of(String skullValue) {
         return new ItemTexture(skullValue);
+    }
+
+    public static ItemTexture of(OfflinePlayer player) {
+        return new ItemTexture(player.getPlayerProfile().getTextures().getSkin().toString());
     }
 }
