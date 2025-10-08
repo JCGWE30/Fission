@@ -18,6 +18,7 @@ public class ItemBuilder {
     private List<String> lore;
     private boolean isDisplay;
     private boolean isGlowing;
+    private String tag;
 
     public ItemBuilder() {
         this.lore = new ArrayList<>();
@@ -67,6 +68,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder tag(String tag){
+        this.tag = tag;
+        return this;
+    }
+
     public ItemStack build(){
         ItemStack item = texture.fetch();
         ItemMeta meta = item.getItemMeta();
@@ -80,6 +86,9 @@ public class ItemBuilder {
             meta.setEnchantmentGlintOverride(true);
         }
         item.setItemMeta(meta);
+        if(tag!=null){
+            item = NBTUtils.addFissionTag(item,tag);
+        }
 
         return NBTUtils.setStackSize(item, amount);
     }
