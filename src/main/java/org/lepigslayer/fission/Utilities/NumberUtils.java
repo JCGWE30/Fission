@@ -10,6 +10,7 @@ public class NumberUtils {
     private static NumberFormat numberFormat = new DecimalFormat("#,##0.##");
     private static TreeMap<Integer, String> numeralMap = new TreeMap<>();
     private static TreeMap<Double, String> abrevMap = new TreeMap<>();
+    private static String[] ordinalSuffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
 
     static{
         abrevMap.put(1000.0,"k");
@@ -67,6 +68,18 @@ public class NumberUtils {
             return "+"+trim(amount);
         }else{
             return trim(amount);
+        }
+    }
+
+    public static String ordinal(int i) {
+        switch (i % 100) {
+            case 11:
+            case 12:
+            case 13:
+                return i + "th";
+            default:
+                return i + ordinalSuffixes[i % 10];
+
         }
     }
 }

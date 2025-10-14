@@ -18,9 +18,10 @@ public class ItemBuilder {
     private List<String> lore;
     private boolean isDisplay;
     private boolean isGlowing;
-    private String tag;
+    private List<String> tags;
 
     public ItemBuilder() {
+        this.tags = new ArrayList<>();
         this.lore = new ArrayList<>();
     }
 
@@ -69,7 +70,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder tag(String tag){
-        this.tag = tag;
+        this.tags.add(tag);
         return this;
     }
 
@@ -86,8 +87,9 @@ public class ItemBuilder {
             meta.setEnchantmentGlintOverride(true);
         }
         item.setItemMeta(meta);
-        if(tag!=null){
-            item = NBTUtils.addFissionTag(item,tag);
+
+        for (String tag : tags) {
+            item = NBTUtils.addFissionTag(item, tag);
         }
 
         return NBTUtils.setStackSize(item, amount);
