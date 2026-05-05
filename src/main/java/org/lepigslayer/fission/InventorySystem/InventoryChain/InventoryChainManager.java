@@ -14,21 +14,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryChainManager implements Listener {
-    private static Map<Player, Deque<InventoryInstance>> chains = new HashMap<>();
+    private static Map<Player, PlayerChain> chains = new HashMap<>();
 
     public static boolean hasPrevious(Player player) {
-        return !chains.get(player).isEmpty();
+        return !chains.get(player).getChainStack().isEmpty();
     }
 
     public static InventoryInstance getPrevious(Player player) {
-        return chains.get(player).peek();
+        return chains.get(player).getChainStack().peek();
     }
 
     public static void traverse(Player player) {
-        Deque<InventoryInstance> chain = chains.get(player);
+        Deque<InventoryInstance> chain = chains.get(player).getChainStack();
 
-        if (chain.isEmpty())
+        if (chain.isEmpty()){
+            player.closeInventory();
             return;
+        }
 
         InventoryInstance inventory = chain.pop();
         inventory.refresh();
@@ -36,17 +38,25 @@ public class InventoryChainManager implements Listener {
     }
 
     public static void wipe(Player player) {
-        chains.get(player).clear();
+        chains.get(player).getChainStack().clear();
+    }
+
+    public static void pushChain(Player player) {
+        chains.get(player).push();
+    }
+
+    public static void popChain(Player player) {
+        chains.get(player).pop();
     }
 
     public static void enqueue(Player player, InventoryInstance inventory) {
-        Deque<InventoryInstance> chain = chains.get(player);
+        Deque<InventoryInstance> chain = chains.get(player).getChainStack();
         chain.push(inventory);
     }
 
     @EventHandler
     public void join(PlayerJoinEvent e) {
-        chains.put(e.getPlayer(), new ArrayDeque<>());
+        chains.put(e.getPlayer(), new PlayerChain());
     }
 
     @EventHandler

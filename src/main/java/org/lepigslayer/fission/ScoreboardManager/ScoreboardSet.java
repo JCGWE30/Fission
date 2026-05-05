@@ -41,7 +41,7 @@ public class ScoreboardSet {
             lines.add(" ");
         }
 
-        if(lines.getLast().isBlank()){
+        if(!lines.isEmpty() && lines.getLast().isBlank()){
             lines.removeLast();
         }
 

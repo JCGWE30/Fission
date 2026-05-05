@@ -4,7 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.checkerframework.checker.units.qual.A;
 import org.lepigslayer.fission.CustomCommand.ArgumentSteps.*;
 
 import java.util.*;
@@ -31,12 +30,12 @@ public class CustomCommandHandler implements CommandExecutor, TabCompleter {
         ArgumentContext context = parseCommand(arguments, true);
 
         if(context == null){
-            commandSender.sendMessage("§cMissing required parameters");
+            commandSender.sendMessage("Missing required parameters");
             return true;
         }
 
         if(context.hasExecuteError || context.hasError){
-            commandSender.sendMessage("§c"+context.getAnyErrorText());
+            commandSender.sendMessage(context.getAnyErrorText());
             return true;
         }
 
@@ -50,7 +49,7 @@ public class CustomCommandHandler implements CommandExecutor, TabCompleter {
         ArgumentContext context = parseCommand(arguments, false);
 
         if(context.hasError)
-            return Collections.singletonList("§c"+context.errorText);
+            return Collections.singletonList(context.errorText);
 
         if(context.hasPrompt)
             return context.promptText;

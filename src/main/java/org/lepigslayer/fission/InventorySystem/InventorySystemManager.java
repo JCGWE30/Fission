@@ -30,7 +30,7 @@ public final class InventorySystemManager implements Listener {
     }
 
     public static void openInventory(Player player, InventoryInstance inventory) {
-        if(processingPlayers.contains(player))
+        if (processingPlayers.contains(player))
             return;
         if (openInventories.containsKey(player))
             InventoryChainManager.enqueue(player, openInventories.get(player));
@@ -62,7 +62,7 @@ public final class InventorySystemManager implements Listener {
 
         try {
             openInventories.get(player).handleClick(e);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             e.setCancelled(true);
             ex.printStackTrace();
             e.getWhoClicked().sendMessage("§cAn error occurred, please report this!");
@@ -73,7 +73,7 @@ public final class InventorySystemManager implements Listener {
     public void close(InventoryCloseEvent e) {
         Player p = (Player) e.getPlayer();
 
-        if(!openInventories.containsKey(p))
+        if (!openInventories.containsKey(p))
             return;
 
         if (switchingPlayers.contains(p))
@@ -85,7 +85,7 @@ public final class InventorySystemManager implements Listener {
 
         processingPlayers.add(p);
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Fission.class), () -> {
-            if(!processingPlayers.contains(p))
+            if (!processingPlayers.contains(p))
                 return;
 
             processingPlayers.remove(p);

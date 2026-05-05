@@ -1,16 +1,19 @@
 package org.lepigslayer.fission.Utilities;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.world.item.component.CustomData;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_21_R5.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class NBTUtils {
     private static final String FISISON_TAG = "FissionTags";
@@ -66,5 +69,35 @@ public class NBTUtils {
                 return true;
         }
         return false;
+    }
+
+    public static ItemStack applyCustomData(ItemStack item, JsonElement data){
+        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+
+        JsonObject jsonObject = extractCustomData(item).orElseGet(JsonObject::new).getAsJsonObject();
+        jsonObject.add("fission_custom_data", data);
+
+        CompoundTag tag = JsonOps.INSTANCE.convertTo(NbtOps.INSTANCE, jsonObject).asCompound().get();
+
+        nmsItem.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+
+        return CraftItemStack.asBukkitCopy(nmsItem);
+    }
+
+    public static Optional<JsonElement> extractCustomData(ItemStack item){
+        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+
+        if(!nmsItem.has(DataComponents.CUSTOM_DATA))
+            return Optional.empty();
+
+        CompoundTag tag = nmsItem.get(DataComponents.CUSTOM_DATA).copyTag();
+
+        JsonObject object = NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE,tag).getAsJsonObject();
+        if(!object.has("fission_custom_data"))
+            return Optional.empty();
+
+        JsonElement data = object.get("fission_custom_data");
+
+        return Optional.of(data);
     }
 }
