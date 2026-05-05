@@ -32,7 +32,7 @@ public abstract class InventoryInstance extends InventoryComponent implements In
             return false;
         if(!player.isOnline())
             return false;
-        return player.getOpenInventory() == inventory;
+        return player.getOpenInventory().getTopInventory() == inventory;
     }
 
     public final Player getPlayer() {
