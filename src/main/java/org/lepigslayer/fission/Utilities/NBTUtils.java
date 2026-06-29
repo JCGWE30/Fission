@@ -12,6 +12,9 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -69,6 +72,26 @@ public class NBTUtils {
                 return true;
         }
         return false;
+    }
+
+    public static List<String> getFissionTags(ItemStack item){
+        if (item == null || item.getType() == Material.AIR)
+            return Collections.emptyList();
+
+        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        DataComponentMap map = nmsItem.getComponents();
+        CustomData data = map.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        CompoundTag tag = data.copyTag();
+        if (!tag.contains(FISISON_TAG))
+            return Collections.emptyList();
+        ListTag listTag = tag.getListOrEmpty(FISISON_TAG);
+        List<String> values = new ArrayList<>();
+        for (Tag tagValue : listTag) {
+            if (!(tagValue instanceof StringTag(String st)))
+                continue;
+            values.add(st);
+        }
+        return values;
     }
 
     public static ItemStack applyCustomData(ItemStack item, JsonElement data){
