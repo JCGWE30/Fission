@@ -85,7 +85,7 @@ public class StringTimeUtils {
         if(duration.toMinutesPart()>0||duration.toHours()>0)
             values.add(String.format("%02d",duration.toMinutesPart()));
 
-        if(duration.toSecondsPart()>0||duration.toHours()>0)
+        if(duration.toSecondsPart()>0||duration.toMinutes()>0)
             values.add(String.format("%02d",duration.toSecondsPart()));
 
         if(values.isEmpty())

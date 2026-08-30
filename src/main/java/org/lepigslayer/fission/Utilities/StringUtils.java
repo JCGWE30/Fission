@@ -1,14 +1,19 @@
 package org.lepigslayer.fission.Utilities;
 
+import it.unimi.dsi.fastutil.chars.CharArrayList;
+import it.unimi.dsi.fastutil.chars.CharList;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.lepigslayer.fission.Colors.CustomColor;
 
+import java.awt.*;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class StringUtils {
+    private static final char STYLE_CHARACTER = '§';
 
     public static String makeProgressBar(double progress, int segments){
         int activeSegments = (int) Math.floor(segments * progress);
@@ -25,6 +30,54 @@ public class StringUtils {
             builder.append("-");
         }
         return builder.toString();
+    }
+
+    public static List<String> smartWrap(String total, int characterLimit){
+        List<String> lines = new ArrayList<>();
+        StringBuilder textBuilder = new StringBuilder();
+        StringBuilder styleBuilder = new StringBuilder();
+        StringBuilder activeStyleBuilder = new StringBuilder();
+
+        boolean isChangingStyle = false;
+        int runningTotal = 0;
+
+        for (char c : total.toCharArray()) {
+            textBuilder.append(c);
+
+            if(isChangingStyle){
+                if(c == STYLE_CHARACTER)
+                    throw new IllegalArgumentException("2 Style Characters in a row");
+                activeStyleBuilder.append(c);
+                isChangingStyle = false;
+                continue;
+            }
+
+            if(c == STYLE_CHARACTER){
+                activeStyleBuilder.append(STYLE_CHARACTER);
+                isChangingStyle = true;
+                continue;
+            }
+
+            if(runningTotal++<characterLimit)
+                continue;
+
+            if(c != ' ')
+                continue;
+
+            String legacy = styleBuilder.toString()+textBuilder;
+            String cleaned = TextComponent.fromLegacy(legacy).toLegacyText();
+
+            lines.add(cleaned.substring(2));
+            styleBuilder.append(activeStyleBuilder);
+            textBuilder = new StringBuilder();
+            runningTotal = 0;
+        }
+
+        String legacy = styleBuilder.toString()+textBuilder;
+        String cleaned = TextComponent.fromLegacy(legacy).toLegacyText();
+        lines.add(cleaned.substring(2));
+
+        return lines;
     }
 
     public static List<String> wrap(String total, int characterLimit, String regex){

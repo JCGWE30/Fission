@@ -8,6 +8,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.lepigslayer.fission.InventorySystem.BaseComponents.BackgroundComponent;
+import org.lepigslayer.fission.InventorySystem.SlotRenderer.SlotRendererComponent;
 
 import java.util.*;
 
@@ -97,6 +99,11 @@ public abstract class InventoryInstance extends InventoryComponent implements In
         this.size = rowCount * 9;
 
         inventory = Bukkit.createInventory(this, size, title);
+    }
+
+    protected void addDefaultComponents(){
+        addComponent(new SlotRendererComponent());
+        addComponent(new BackgroundComponent());
     }
 
     protected final <T extends InventoryComponent> T addComponent(T component){
